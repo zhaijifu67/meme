@@ -1,0 +1,1138 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+		<title>宅爷的表情包工具箱</title>
+		<script src="../index/js/main.js"></script>
+		<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
+			integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+		<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
+			integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous">
+		</script>
+		<!-- 图像处理库 -->
+		<script src="https://unpkg.com/omggif@1.0.10/omggif.js"></script>
+		<script src="https://cdn.bootcdn.net/ajax/libs/gifshot/0.3.2/gifshot.min.js"></script>
+		<style>
+			:root {
+				--bs-primary-text: #0a58ca;
+				--bs-secondary-text: #6c757d;
+				--bs-success-text: #146c43;
+				--bs-info-text: #087990;
+				--bs-warning-text: #997404;
+				--bs-danger-text: #b02a37;
+				--bs-light-text: #6c757d;
+				--bs-dark-text: #495057;
+			}
+
+			.tab-content {
+				border-top: none;
+				border-top-left-radius: 0;
+				border-top-right-radius: 0;
+			}
+
+			.bd-callout {
+				line-height: 2.25rem;
+				color: var(--bd-callout-color, inherit);
+				background-color: var(--bd-callout-bg, var(--bs-gray-100));
+				border-left: 0.25rem solid var(--bd-callout-border, var(--bs-gray-300));
+			}
+
+			.bd-callout-info {
+				--bd-callout-color: var(--bs-info-text);
+				--bd-callout-bg: var(--bs-info-bg-subtle);
+				--bd-callout-border: var(--bs-info-border-subtle);
+			}
+
+			.bd-callout-warning {
+				--bd-callout-color: var(--bs-warning-text);
+				--bd-callout-bg: var(--bs-warning-bg-subtle);
+				--bd-callout-border: var(--bs-warning-border-subtle);
+			}
+
+			.bd-callout-danger {
+				--bd-callout-color: var(--bs-danger-text);
+				--bd-callout-bg: var(--bs-danger-bg-subtle);
+				--bd-callout-border: var(--bs-danger-border-subtle);
+			}
+		</style>
+		<script>
+			// gif配置文件
+			var emo_setting = {
+				"抱": {
+					"img": "img/抱.gif",
+					"class": "ImgGif",
+					"type": "EmoGif",
+					"btncolor": "info",
+					"pos": [
+						[76, 136],
+						[80, 136],
+						[76, 136],
+						[80, 136]
+					],
+					"size": [
+						[203, 125],
+						[203, 125],
+						[203, 125],
+						[203, 125]
+					],
+					"rotate": [0, 0, 0, 0],
+				},
+				"声援": {
+					"img": "img/声援.gif",
+					"class": "ImgGif",
+					"type": "EmoGif",
+					"btncolor": "info",
+					"pos": [
+						[32, 30],
+						[25, 25],
+						[32, 30],
+						[35, 45],
+						[30, 70],
+						[30, 45]
+					],
+					"size": [
+						[85, 58],
+						[95, 60],
+						[85, 60],
+						[75, 65],
+						[90, 56],
+						[85, 70]
+					],
+					"rotate": [0, 0, 0, 0, 0, 0]
+				},
+				"顶": {
+					"img": "img/顶.gif",
+					"class": "ImgGif",
+					"type": "EmoGif",
+					"btncolor": "info",
+					"pos": [
+						[92, 32],
+						[93, 50],
+						[79, 98],
+						[89, 34],
+						[88, 18],
+						[92, 28]
+					],
+					"size": [
+						[46, 45],
+						[46, 47],
+						[73, 20],
+						[57, 40],
+						[57, 44],
+						[47, 43]
+					],
+					"rotate": [0, 0, 0, 0, 0, 0],
+				},
+				"抓": {
+					"img": "img/抓.gif",
+					"class": "ImgGif",
+					"type": "EmoGif",
+					"btncolor": "info",
+					"pos": [
+						[42, 170],
+						[40, 177],
+						[42, 170],
+						[40, 177],
+						[42, 170],
+						[40, 177],
+						[31, 191],
+						[7, 217],
+						[12, 219],
+						[6, 222],
+						[31, 209]
+					],
+					"size": [
+						[260, 136],
+						[265, 129],
+						[260, 136],
+						[265, 129],
+						[260, 136],
+						[265, 129],
+						[287, 115],
+						[329, 91],
+						[316, 90],
+						[324, 87],
+						[280, 103]
+					],
+					"rotate": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+				},
+				"咬": {
+					"img": "img/咬.gif",
+					"class": "ImgGif",
+					"type": "EmoGif",
+					"btncolor": "info",
+					"pos": [
+						[85, 102],
+						[85, 97],
+						[83, 123],
+						[82, 166],
+						[81, 164],
+						[85, 143],
+						[85, 154],
+						[78, 159],
+						[75, 167],
+						[82, 134],
+						[83, 129],
+						[82, 113]
+					],
+					"size": [
+						[123, 114],
+						[120, 119],
+						[124, 93],
+						[128, 50],
+						[128, 52],
+						[121, 73],
+						[120, 62],
+						[134, 58],
+						[138, 50],
+						[124, 95],
+						[122, 88],
+						[126, 103]
+					],
+					"rotate": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+				},
+				"比心": {
+					"img": "img/比心.gif",
+					"class": "ImgGif",
+					"type": "EmoGif",
+					"btncolor": "info",
+					"pos": [
+						[48, 32],
+						[49, 34],
+						[52, 40],
+						[48, 76],
+						[55, 53],
+						[52, 44]
+					],
+					"size": [
+						[143, 124],
+						[143, 118],
+						[134, 127],
+						[143, 95],
+						[132, 114],
+						[138, 119]
+					],
+					"rotate": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+				},
+				"指": {
+					"img": "img/指.gif",
+					"class": "ImgGif",
+					"type": "EmoGif",
+					"btncolor": "info",
+					"pos": [
+						[23, 114],
+						[20, 114],
+						[22, 114],
+						[23, 114]
+					],
+					"size": [
+						[62, 64],
+						[65, 64],
+						[64, 64],
+						[62, 64]
+					],
+					"rotate": [0, 0, 0, 0],
+				},
+				"敲": {
+					"img": "img/敲.gif",
+					"class": "ImgGif",
+					"type": "EmoGif",
+					"btncolor": "info",
+					"pos": [
+						[66, 148],
+						[54, 179],
+						[45, 196],
+						[49, 186],
+						[57, 172],
+						[72, 132],
+						[67, 133]
+					],
+					"size": [
+						[150, 104],
+						[167, 99],
+						[185, 83],
+						[178, 92],
+						[168, 104],
+						[138, 127],
+						[147, 117]
+					],
+					"rotate": [0, 0, 0, 0, 0, 0, 0],
+				},
+				"滚": {
+					"img": "img/滚.gif",
+					"class": "ImgGif",
+					"type": "EmoGif",
+					"btncolor": "info",
+					"pos": [
+						[61, 38],
+						[67, 38],
+						[64, 39],
+						[62, 39],
+						[68, 35],
+					],
+					"size": [
+						[136, 120],
+						[121, 132],
+						[128, 130],
+						[134, 130],
+						[123, 138]
+					],
+					"rotate": [0, 72, 144, 216, 288],
+				},
+				"摸头": {
+					"img": "img/摸.gif",
+					"class": "ImgGif",
+					"type": "EmoGif",
+					"btncolor": "primary",
+					"pos": [
+						[14, 20],
+						[12, 33],
+						[8, 40],
+						[10, 33],
+						[12, 20],
+						[14, 20]
+					],
+					"size": [
+						[98, 92],
+						[100, 79],
+						[104, 72],
+						[102, 79],
+						[98, 92],
+						[98, 92]
+					],
+					"rotate": [0, 0, 0, 0, 0, 0, 0],
+				},
+				"加载": {
+					"img": "img/加载.gif",
+					"class": "ImgGif",
+					"type": "EmoGif",
+					"btncolor": "primary",
+					"pos": [
+						[0, 0],
+						[0, 0],
+						[0, 0],
+						[0, 0],
+						[0, 0],
+						[0, 0],
+						[0, 0],
+						[0, 0]
+					],
+					"size": [
+						[100, 100],
+						[100, 100],
+						[100, 100],
+						[100, 100],
+						[100, 100],
+						[100, 100],
+						[100, 100],
+						[100, 100]
+					],
+					"rotate": [0, 0, 0, 0, 0, 0, 0, 0],
+				},
+				"为所欲为": {
+					"img": "img/gif为所欲为.gif",
+					"class": "TextGif",
+					"type": "GifText",
+					"btncolor": "warning",
+					"texts": ["好", "就算你是资深调查员", "就算骰出了大成功", "我叫你死你就得死", "因为我是KP", "KP了不起啊", "sorry KP真的了不起", "以后叫他天天撕卡",
+						"天天撕 天天撕"
+					],
+					"subtitle": {
+						"font_size": 14,
+						"intervals": [
+							[13, 16],
+							[33, 45],
+							[54, 75],
+							[77, 100],
+							[102, 116],
+							[121, 131],
+							[139, 163],
+							[181, 190],
+							[192, 205]
+						]
+					}
+				},
+				"真香": {
+					"img": "img/gif真香.gif",
+					"class": "TextGif",
+					"type": "GifText",
+					"btncolor": "warning",
+					"texts": ["我王境泽就是饿死", "死外边 从这跳下去", "也不会吃你们一点东西", "真香"],
+					"subtitle": {
+						"font_size": 14,
+						"intervals": [
+							[1, 11],
+							[16, 29],
+							[32, 44],
+							[47, 59]
+						]
+					}
+				},
+				"曾小贤": {
+					"img": "img/gif曾小贤.gif",
+					"class": "TextGif",
+					"type": "GifText",
+					"btncolor": "warning",
+					"texts": ["平时你打电子游戏吗", "偶尔", "星际还是魔兽", "连连看"],
+					"subtitle": {
+						"font_size": 14,
+						"intervals": [
+							[3, 13],
+							[23, 27],
+							[28, 42],
+							[55, 58]
+						]
+					}
+				},
+				"谁反对": {
+					"img": "img/gif谁反对.gif",
+					"class": "TextGif",
+					"type": "GifText",
+					"btncolor": "warning",
+					"texts": ["宅爷这周要咕咕了", "谁赞成", "谁反对", "我反对"],
+					"subtitle": {
+						"font_size": 14,
+						"intervals": [
+							[1, 12],
+							[18, 25],
+							[30, 36],
+							[39, 59]
+						]
+					}
+				},
+				"喜报": {
+					"img": "img/喜报.jpg",
+					"class": "TextGif",
+					"type": "ImgText",
+					"btncolor": "primary",
+					"color": "#c80000",
+					"font_size": 80,
+					"border_color": "#ffff00",
+					"border_size": 4,
+					"text_align": "center",
+					"pos": [300, 240],
+					"font_area_size": [530, 300]
+				},
+				"悲报": {
+					"img": "img/悲报.jpg",
+					"class": "TextGif",
+					"type": "ImgText",
+					"btncolor": "primary",
+					"color": "#000000",
+					"font_size": 80,
+					"border_color": "#ffffff",
+					"border_size": 4,
+					"text_align": "center",
+					"pos": [300, 240],
+					"font_area_size": [530, 300]
+				},
+				"小心": {
+					"img": "img/小心.jpg",
+					"class": "TextGif",
+					"type": "ImgText",
+					"btncolor": "primary",
+					"color": "#ffffff",
+					"font_size": 80,
+					"border_color": "#ffffff",
+					"border_size": 0,
+					"text_align": "center",
+					"pos": [270, 100],
+					"font_area_size": [230, 200]
+				},
+				"狂粉": {
+					"img": "img/狂粉.jpg",
+					"class": "TextGif",
+					"type": "ImgText",
+					"btncolor": "primary",
+					"color": "#000000",
+					"font_size": 65,
+					"border_color": "#000000",
+					"border_size": 0,
+					"text_align": "center",
+					"pos": [282, 145],
+					"font_area_size": [280, 130]
+				},
+			}
+			window.onload = function() {
+				// 表情包按键
+				for (let k in emo_setting) {
+					// <button class="btn btn-primary" onclick="creatEmoMain(this.innerText);">抱</button>
+					let btn = document.createElement("button");
+					document.getElementById(`${emo_setting[k]["class"]||'ImgGif'}`).append(btn);
+					btn.className = `btn btn-${emo_setting[k]['btncolor']||'primary'} mx-1`;
+					btn.setAttribute('onclick', 'creatEmoMain(this.innerText);');
+					btn.innerText = k;
+				}
+			}
+			let userImage = null;
+			let creatGIFBlob = null;
+			let creatGIFUrl = null;
+			// ================================================================
+			// 3. 工具函数
+			// ================================================================
+			function setStatus(msg, status_type) {
+				document.getElementById("status").innerText = msg;
+				document.getElementById('status').className = `bd-callout bd-callout-${status_type}`;
+			}
+
+			function loadUserImage(el) {
+				var file = el.files[0];
+				return new Promise((resolve, reject) => {
+					if (!file || !file.type.startsWith('image/')) {
+						reject(new Error('请上传有效的图片文件'));
+						setStatus('❌ 请上传有效的图片文件', 'danger');
+						return;
+					}
+					const reader = new FileReader();
+					reader.onload = (e) => {
+						const dataURL = e.target.result;
+						const img = new Image();
+						img.onload = () => {
+							userImage = img;
+							document.getElementById('previewImg').src = dataURL;
+							document.getElementById('previewImg').className = "img-thumbnail d-block w-100 mb-3";
+							resolve(img);
+						};
+						img.onerror = () => {
+							reject(new Error('图片加载失败，请尝试其他格式'));
+							setStatus('❌ 图片加载失败，请尝试其他格式', 'danger');
+						}
+						img.src = dataURL;
+					};
+					reader.onerror = () => {
+						reject(new Error('读取文件失败'));
+						setStatus('❌ 读取文件失败', 'danger');
+					}
+					reader.readAsDataURL(file);
+				});
+			}
+			// 显示结果
+			function showResult(data) {
+				var resultImg = document.createElement("img");
+				if (data instanceof Blob) {
+					const url = URL.createObjectURL(data);
+					if (creatGIFUrl) URL.revokeObjectURL(creatGIFUrl);
+					creatGIFUrl = url;
+					creatGIFBlob = data;
+					resultImg.src = url;
+				} else if (typeof data === 'string' && data.startsWith('data:image/gif;base64,')) {
+					// 如果返回 Data URL（备用）
+					resultImg.src = data;
+					// 转为 Blob 以便下载
+					try {
+						const byteString = atob(data.split(',')[1]);
+						const mimeString = data.split(',')[0].split(':')[1].split(';')[0];
+						const ab = new ArrayBuffer(byteString.length);
+						const ia = new Uint8Array(ab);
+						for (let i = 0; i < byteString.length; i++) {
+							ia[i] = byteString.charCodeAt(i);
+						}
+						creatGIFBlob = new Blob([ab], {
+							type: mimeString
+						});
+					} catch (e) {
+						creatGIFBlob = null;
+					}
+				} else {
+					setStatus('❌ 编码结果格式异常', 'danger');
+					return;
+				}
+				resultImg.name = Date.now() + ".gif";
+				resultImg.alt = Date.now() + ".gif";
+				resultImg.className = "img-thumbnail m-2";
+				document.getElementById("result").prepend(resultImg);
+				// 自动下载
+				if (document.getElementById('autoDownload').checked) {
+					const a = document.createElement('a');
+					a.href = resultImg.src;
+					a.download = Date.now() + ".gif";
+					a.click();
+				}
+			}
+			// 清除结果
+			function resetResult() {
+				if (creatGIFUrl) {
+					URL.revokeObjectURL(creatGIFUrl);
+					creatGIFUrl = null;
+				}
+				creatGIFBlob = null;
+			}
+			// ================================================================
+			// 4. 获取 omggif 全局变量（兼容）
+			// ================================================================
+			function getGifReader() {
+				const global = window;
+				const candidates = [
+					global.omggif?.GifReader,
+					global.Omggif?.GifReader,
+					global.GifReader,
+					global.omggif,
+					global.Omggif,
+				];
+				for (let c of candidates) {
+					if (typeof c === 'function') return c;
+				}
+				if (global.omggif && typeof global.omggif === 'object') {
+					return global.omggif.GifReader || global.omggif;
+				}
+				return null;
+			}
+
+			// ================================================================
+			// 5. 解析 GIF（omggif）
+			// ================================================================
+			async function loadAndParseGIF(url) {
+				const GifReader = getGifReader();
+				if (!GifReader) {
+					throw new Error('omggif 库未正确加载，请检查网络或更换 CDN。');
+					setStatus('❌ omggif库未正确加载', 'danger');
+				}
+
+				const response = await fetch(url);
+				if (!response.ok) {
+					throw new Error(`加载 GIF 失败 (HTTP ${response.status})`);
+					setStatus(`❌ 加载 GIF 失败 (HTTP ${response.status})`, 'danger');
+				}
+				const buffer = await response.arrayBuffer();
+				const data = new Uint8Array(buffer);
+
+				const reader = new GifReader(data);
+				const width = reader.width;
+				const height = reader.height;
+				const frameCount = reader.numFrames();
+
+				const frames = [];
+				for (let i = 0; i < frameCount; i++) {
+					const frameInfo = reader.frameInfo(i);
+					const rgba = new Uint8ClampedArray(width * height * 4);
+					reader.decodeAndBlitFrameRGBA(i, rgba);
+					const imageData = new ImageData(rgba, width, height);
+					const delay = frameInfo.delay || 100;
+					frames.push({
+						imageData,
+						delay
+					});
+				}
+				return {
+					width,
+					height,
+					frames
+				};
+			}
+
+			// ================================================================
+			// 6. 绘制合成帧
+			// ================================================================
+			function drawCombinedFrame(userImg, width, height, pos, size, rotate, gifImageData) {
+				const canvas = document.createElement('canvas');
+				canvas.width = width;
+				canvas.height = height;
+				const ctx = canvas.getContext('2d', {
+					willReadFrequently: true
+				});
+
+				// 背景色
+				ctx.fillStyle = '#ffffff';
+				ctx.fillRect(0, 0, width, height);
+
+				// 1. 绘制用户图片
+				const [px, py] = pos;
+				const [sw, sh] = size;
+				const rad = (rotate || 0) * Math.PI / 180;
+				ctx.save();
+				const cx = px + sw / 2;
+				const cy = py + sh / 2;
+				ctx.translate(cx, cy);
+				ctx.rotate(rad);
+				// 如果用户图片已加载，绘制它
+				if (userImg && userImg.complete && userImg.naturalWidth > 0) {
+					ctx.drawImage(userImg, -sw / 2, -sh / 2, sw, sh);
+				} else {
+					// 如果用户图片无效，绘制一个蓝色矩形替代
+					ctx.fillStyle = '#0000ff';
+					ctx.fillRect(-sw / 2, -sh / 2, sw, sh);
+				}
+				ctx.restore();
+
+				// 2. 绘制 GIF 帧（ImageData）
+				// 离屏绘制
+				const offscreen = document.createElement('canvas');
+				offscreen.width = gifImageData.width;
+				offscreen.height = gifImageData.height;
+				offscreen.getContext('2d').putImageData(gifImageData, 0, 0);
+				ctx.drawImage(offscreen, 0, 0);
+				// 逐帧调试用
+				// document.body.append(canvas);
+				return canvas;
+			}
+			function drawMultilineTextAutoFit(ctx, text, refX, refY, align, color, borderColor, borderSize, fontSize, maxWidth,
+				maxHeight) {
+				const lines = text.split('\n').filter(line => line.trim() !== '');
+				if (lines.length === 0) return;
+				// 计算在给定字号下文本的尺寸
+				function measureTextSize(fontSize) {
+					ctx.font = fontSize + 'px "Microsoft YaHei", sans-serif';
+					let maxLineWidth = 0;
+					for (let line of lines) {
+						const metrics = ctx.measureText(line);
+						if (metrics.width > maxLineWidth) maxLineWidth = metrics.width;
+					}
+					const lineHeight = fontSize * 1.3;
+					const totalHeight = lines.length * lineHeight;
+					return {
+						width: maxLineWidth,
+						height: totalHeight,
+						lineHeight
+					};
+				}
+				// 如果未指定 maxWidth/maxHeight，默认使用画布宽度/高度
+				if (!maxWidth) maxWidth = ctx.canvas.width;
+				if (!maxHeight) maxHeight = ctx.canvas.height;
+
+				// 计算初始尺寸
+				let {
+					width: textWidth,
+					height: textHeight,
+					lineHeight
+				} = measureTextSize(fontSize);
+				// 如果超出，逐步减小字号（每次减1，也可以用二分查找优化）
+				let scale = 1;
+				const maxIterations = 50;
+				let i = 0;
+				while ((textWidth > maxWidth || textHeight > maxHeight) && fontSize > 2 && i < maxIterations) {
+					fontSize -= 1;
+					const size = measureTextSize(fontSize);
+					textWidth = size.width;
+					textHeight = size.height;
+					lineHeight = size.lineHeight;
+					i++;
+				}
+				// 如果仍然超出，强制按比例缩放（理论上不会，但以防万一）
+				if (textWidth > maxWidth || textHeight > maxHeight) {
+					const scaleX = maxWidth / textWidth;
+					const scaleY = maxHeight / textHeight;
+					const scale = Math.min(scaleX, scaleY);
+					fontSize = Math.floor(fontSize * scale);
+					const size = measureTextSize(fontSize);
+					textWidth = size.width;
+					textHeight = size.height;
+					lineHeight = size.lineHeight;
+				}
+				// 重新设置字体（最终字号）
+				ctx.font = fontSize + 'px "Microsoft YaHei", sans-serif';
+				// 垂直居中计算
+				const startY = refY - textHeight / 2 + lineHeight / 2;
+				// 水平对齐逻辑
+				let textAlign = align || 'center';
+				ctx.textBaseline = 'middle';
+				lines.forEach((line, index) => {
+					const currentY = startY + index * lineHeight;
+					let currentX;
+					if (textAlign === 'center') {
+						ctx.textAlign = 'center';
+						currentX = refX;
+					} else if (textAlign === 'right') {
+						ctx.textAlign = 'right';
+						currentX = refX;
+					} else { // left
+						ctx.textAlign = 'left';
+						currentX = refX;
+					}
+					// 描边
+					if (borderSize > 0 && borderColor) {
+						ctx.lineWidth = borderSize * 2;
+						ctx.strokeStyle = borderColor;
+						ctx.strokeText(line, currentX, currentY);
+					}
+					// 填充
+					ctx.fillStyle = color;
+					ctx.fillText(line, currentX, currentY);
+				});
+			}
+			// ================================================================
+			// 7. 使用 gifshot 合成
+			// ================================================================
+			async function creatEmoMain(actionKey) {
+				const setting = emo_setting[actionKey];
+				if (!setting) {
+					setStatus(`❌ 未找到表情配置: ${actionKey}`, 'danger');
+					return;
+				}
+				// 判断类型
+				// 先头像后gif
+				if (setting["type"] == "EmoGif") {
+					creatEmoGif(setting);
+				}
+				// 先图像后文字
+				if (setting["type"] == "ImgText") {
+					creatImgText(setting);
+				}
+				// 视频字幕
+				if (setting["type"] == "GifText") {
+					creatGifText(setting);
+				}
+			}
+			// 视频字幕
+			async function creatGifText(setting) {
+				// 弹出输入框，获取多行文本
+				const userText = document.getElementById('userText').value;
+				if (userText == "") {
+					let text = "";
+					for (let i in setting['texts']) text += "\n" + setting['texts'][i];
+					setStatus("⚠️ 请按照提示输入要显示的文本：" + text, "warning");
+					return; // 取消操作
+				}; // 取消
+
+				const lines = userText.split('\n').filter(line => line.trim() !== '');
+				if (lines.length === 0) {
+					let text = "";
+					for (let i in setting['texts']) text += "\n" + setting['texts'][i];
+					setStatus("⚠️ 请按照提示输入要显示的文本：" + text, "warning");
+					return; // 取消操作
+				}; // 取消
+
+				const gifUrl = setting.img;
+				const subConfig = setting.subtitle;
+				if (!subConfig || !subConfig.intervals) {
+					setStatus('❌ 字幕配置不完整', 'danger');
+					return;
+				}
+				const {
+					font_size,
+					intervals
+				} = subConfig;
+				// 校验区间数量与输入行数是否匹配
+				if (lines.length > intervals.length) {
+					setStatus(`⚠️ 输入 ${lines.length} 行，但只配置了 ${intervals.length} 个区间，多余行将被忽略`, 'warning');
+				} else if (lines.length < intervals.length) {
+					setStatus(`⚠️ 输入 ${lines.length} 行，但配置了 ${intervals.length} 个区间，只使用前 ${lines.length} 个区间`, 'warning');
+				}
+				// 取有效行数
+				const validCount = Math.min(lines.length, intervals.length);
+				const usedLines = lines.slice(0, validCount);
+				if (usedLines.length != setting['texts'].length) {
+					let text = "";
+					for (let i in setting['texts']) text += "\n" + setting['texts'][i];
+					setStatus("⚠️ 请按照提示输入要显示的文本：" + text, "warning");
+					return; // 取消操作
+				}
+				const usedIntervals = intervals.slice(0, validCount);
+				resetResult();
+				setStatus('🔄 加载中 ...', 'info');
+				try {
+					// 解析 GIF
+					const {
+						width,
+						height,
+						frames
+					} = await loadAndParseGIF(gifUrl);
+					if (!frames || frames.length === 0) throw new Error('GIF 解析失败');
+
+					const totalFrames = frames.length;
+					// 预计算每帧要显示的文字（单句或空）
+					const frameTexts = new Array(totalFrames).fill(null);
+					for (let i = 0; i < totalFrames; i++) {
+						for (let idx = 0; idx < usedIntervals.length; idx++) {
+							const [start, end] = usedIntervals[idx];
+							if (i >= start && i <= end) {
+								frameTexts[i] = usedLines[idx];
+								break; // 每帧只显示一句（若区间重叠，只显示最先匹配的）
+							}
+						}
+					}
+					// 准备 gifshot 需要的 images 和 delays
+					const images = [];
+					const delays = [];
+
+					// 创建临时画布
+					const canvas = document.createElement('canvas');
+					canvas.width = width;
+					canvas.height = height;
+					const ctx = canvas.getContext('2d', {
+						willReadFrequently: true
+					});
+					for (let i = 0; i < totalFrames; i++) {
+						const frame = frames[i];
+						const {
+							imageData,
+							delay
+						} = frame;
+
+						// 1. 绘制 GIF 当前帧
+						ctx.putImageData(imageData, 0, 0);
+						// 2. 绘制字幕（如果有）
+						const text = frameTexts[i];
+						if (text) {
+							// 居中绘制
+							ctx.save();
+							ctx.textAlign = 'center';
+							ctx.textBaseline = 'middle';
+							ctx.font = font_size + 'px "Microsoft YaHei", sans-serif';
+							ctx.fillStyle = '#ffffff';
+							// 可添加描边增强可读性（可选）
+							ctx.strokeStyle = '#000000';
+							ctx.lineWidth = 2;
+							ctx.strokeText(text, canvas.width / 2, canvas.height - font_size);
+							ctx.fillText(text, canvas.width / 2, canvas.height - font_size);
+							ctx.restore();
+						}
+						// 3. 转换为 Image 对象（gifshot 要求）
+						const img = await new Promise((resolve, reject) => {
+							const imgObj = new Image();
+							imgObj.onload = () => resolve(imgObj);
+							imgObj.onerror = () => reject(new Error('帧转换失败'));
+							imgObj.src = canvas.toDataURL('image/png');
+						});
+						images.push(img);
+						delays.push(delay);
+						setStatus(`🔄 处理帧 ${i+1}/${totalFrames}`, 'info');
+					}
+					setStatus('⏳ 编码中 ...', 'info');
+					// 调用 gifshot 生成 GIF
+					return new Promise((resolve, reject) => {
+						gifshot.createGIF({
+							images: images,
+							gifWidth: width,
+							gifHeight: height,
+							frameDuration: delays.map(d => d / 1000),
+							repeat: 0,
+							file: true,
+							fileName: 'subtitle.gif'
+						}, function(obj) {
+							if (!obj.error) {
+								setStatus('✅ 合成成功', 'info');
+								showResult(obj.image);
+								resolve(obj.image);
+							} else {
+								reject(new Error(obj.error));
+							}
+						});
+					});
+				} catch (err) {
+					console.error('字幕合成失败:', err);
+					setStatus(`❌ 失败: ${err.message}`);
+				}
+			}
+
+			// 先图像后文字
+			async function creatImgText(setting) {
+				// 获取用户输入的文本（多行）
+				const userText = document.getElementById('userText').value;
+				if (userText == "") {
+					setStatus("⚠️ 请按照提示输入要显示的文本", "warning")
+					return; // 取消操作
+				}
+				if (!setting || !setting.img) {
+					setStatus('❌ 文本配置错误：缺少背景图', 'danger');
+					return;
+				}
+				setStatus('🔄 加载中 ...', 'info');
+				try {
+					// 1. 加载背景图
+					const bgImg = await new Promise((resolve, reject) => {
+						const img = new Image();
+						img.onload = () => resolve(img);
+						img.onerror = () => {
+							reject(new Error('背景图加载失败'));
+							setStatus('❌ 背景图加载失败', 'danger');
+						}
+						img.src = setting.img;
+					});
+
+					const width = bgImg.width;
+					const height = bgImg.height;
+					// 2. 创建画布并绘制背景
+					const canvas = document.createElement('canvas');
+					canvas.width = width;
+					canvas.height = height;
+					const ctx = canvas.getContext('2d', {
+						willReadFrequently: true
+					});
+					ctx.drawImage(bgImg, 0, 0);
+					// 3. 绘制文本
+					const {
+						pos,
+						text_align,
+						color,
+						font_size,
+						border_color,
+						border_size,
+						font_area_size
+					} = setting;
+					// 获取区域限制，如果未设置则使用画布大小
+					const area = setting.font_area_size || [canvas.width, canvas.height];
+					const maxW = area[0];
+					const maxH = area[1];
+					// 调用绘制
+					drawMultilineTextAutoFit(
+						ctx,
+						userText,
+						pos[0], pos[1],
+						text_align,
+						color,
+						border_color,
+						border_size || 0,
+						font_size || 24,
+						maxW,
+						maxH
+					);
+					// 4. 导出为 PNG Blob
+					const blob = await new Promise(resolve => canvas.toBlob(resolve, 'image/png'));
+					// 5. 显示结果（复用原有显示逻辑）
+					setStatus('✅ 合成成功', 'info');
+					showResult(blob); // showResult 需要兼容 Blob
+				} catch (err) {
+					console.error('文本合成失败:', err);
+					setStatus(`❌ 失败: ${err.message}`, 'danger');
+				}
+			}
+			// 先头像后gif
+			async function creatEmoGif(setting) {
+				if (!userImage) {
+					setStatus('⚠️ 请先上传一张图片作为头像', 'warning');
+					return;
+				}
+				const gifUrl = setting.img;
+				const posList = setting.pos || [];
+				const sizeList = setting.size || [];
+				const rotateList = setting.rotate || [];
+				if (posList.length === 0 || sizeList.length === 0) {
+					setStatus('❌ 配置错误: pos 或 size 为空', 'danger');
+					return;
+				}
+				resetResult();
+				setStatus('🔄 加载中 ...', 'info');
+				try {
+					const {
+						width,
+						height,
+						frames
+					} = await loadAndParseGIF(gifUrl);
+					if (!frames || frames.length === 0) {
+						throw new Error('GIF 解析失败：没有帧数据');
+						setStatus('❌ GIF 解析失败：没有帧数据', 'danger');
+					}
+
+					const totalFrames = frames.length;
+
+					const canvases = [];
+					for (let i = 0; i < totalFrames; i++) {
+						const frame = frames[i];
+						const {
+							imageData,
+							delay
+						} = frame;
+
+						const idx = i % posList.length;
+						const pos = posList[idx] || posList[0];
+						const size = sizeList[idx] || sizeList[0];
+						const rotate = rotateList[idx] || rotateList[0] || 0;
+
+						const canvas = drawCombinedFrame(userImage, width, height, pos, size, rotate, imageData);
+						canvases.push({
+							canvas,
+							delay
+						});
+						setStatus(`🔄 处理帧 ${i+1}/${totalFrames}`, 'info');
+					}
+
+					return new Promise((resolve, reject) => {
+						const images = canvases.map(item => item.canvas);
+						const delays = canvases.map(item => item.delay);
+
+						// 配置：要求返回 Blob
+						gifshot.createGIF({
+							images: images,
+							gifWidth: width,
+							gifHeight: height,
+							frameDuration: delays.map(d => d / 1000),
+							repeat: 0,
+							file: true,
+							fileName: 'output.gif'
+						}, function(obj) {
+							if (!obj.error) {
+								const result = obj.image;
+								setStatus('✅ 合成成功', 'info');
+								showResult(result);
+								resolve(result);
+							} else {
+								reject(new Error(obj.error));
+							}
+						});
+					});
+
+				} catch (err) {
+					setStatus(`❌ 合成失败: ${err.message || '未知错误'}`, 'danger');
+					throw err;
+				}
+			}
+		</script>
+	</head>
+	<body class="bg-body-tertiary">
+		<div class="container-xxl my-3">
+			<h1 class="m5-3 fw-semibold">宅爷的表情包工具箱</h1>
+			<div class="progress-wrap" id="progressWrap">
+				<div class="progress-bar" id="progressBar"></div>
+			</div>
+			<ul class="nav nav-tabs" id="myTab" role="tablist">
+				<li class="nav-item" role="presentation">
+					<button class="nav-link active" id="tab-pane-1-tab" data-bs-toggle="tab"
+						data-bs-target="#tab-pane-1" type="button" role="tab" aria-controls="tab-pane-1"
+						aria-selected="true">🤗 头像表情</button>
+				</li>
+				<li class="nav-item" role="presentation">
+					<button class="nav-link" id="tab-pane-2-tab" data-bs-toggle="tab" data-bs-target="#tab-pane-2"
+						type="button" role="tab" aria-controls="tab-pane-2" aria-selected="false">📝 文字表情</button>
+				</li>
+			</ul>
+			<div class="card tab-content mb-3" id="myTabContent">
+				<div class="bd-callout bd-callout-warning" id="status"></div>
+				<div class="card-body tab-pane fade show active" id="tab-pane-1" role="tabpanel"
+					aria-labelledby="tab-pane-1-tab" tabindex="0">
+					<div class="row">
+						<div class="col-12 col-md-4">
+							<div>
+								<label for="imgInput" class="form-label">选择头像文件</label>
+								<input class="form-control mb-3" type="file" accept="image/*" id="imgInput"
+									onchange="loadUserImage(this);">
+								<img id="previewImg" class="d-block" />
+							</div>
+						</div>
+						<div class="col-12 col-md-8" id="ImgGif">
+							<!-- <button class="btn btn-primary" onclick="creatEmoMain(this.innerText);">抱</button> -->
+						</div>
+					</div>
+				</div>
+				<div class="card-body tab-pane fade" id="tab-pane-2" role="tabpanel" aria-labelledby="tab-pane-2-tab"
+					tabindex="0">
+					<div class="row">
+						<div class="col-12 col-md-4">
+							<div>
+								<div class="form-floating mb-3">
+									<textarea class="form-control" placeholder="Leave a comment here" id="userText"
+										style="height: 200px"></textarea>
+									<label for="userText">要填写的内容</label>
+								</div>
+							</div>
+						</div>
+						<div class="col-12 col-md-8" id="TextGif">
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="card">
+				<div class="bd-callout bd-callout-info mt-3">生成结果，可以右键保存图片</div>
+				<div class="card-body">
+					<div class="form-check">
+						<input class="form-check-input" type="checkbox" value="" id="autoDownload" checked>
+						<label class="form-check-label" for="autoDownload">
+							自动下载
+						</label>
+					</div>
+					<div id="result"></div>
+				</div>
+			</div>
+		</div>
+	</body>
+</html>
